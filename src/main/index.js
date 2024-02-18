@@ -1,6 +1,5 @@
 /**
  * The entrypoint for the action.
  */
-const { run } = require('.')
 
-run()
+console.log('post-run-action')
