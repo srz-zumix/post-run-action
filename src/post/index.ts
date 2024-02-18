@@ -10,9 +10,9 @@ const exec = require('@actions/exec');
 async function run() {
   try {
     const content = core.getInput('post-run', { required: true })
-    const scriptPath = process.env.RUNNER_TEMP + "/post-run.sh"
+    const scriptPath : string = process.env['RUNNER_TEMP'] + "/post-run.sh"
     await fs.writeFile(scriptPath, content)
-    const bashPath = await io.which('bash', true)
+    const bashPath : string = await io.which('bash', true)
     await exec.exec(`"${bashPath}"`, [scriptPath]);
   } catch (error) {
     // Fail the workflow run if an error occurs
