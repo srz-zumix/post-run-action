@@ -19,6 +19,7 @@ trim_trailing_whitespace = true
 
 [*.{json,ecrc}]
 indent_size = 2
+max_line_length = 180
 
 [{Makefile,GNUmakefile}]
 indent_style = tab

@@ -57,7 +57,7 @@ jobs:
         with:
           post-run: |
             echo "test" | tee "${{ runner.temp }}/test.txt"
-      
+
       - name: Test file
         run: |
           test ! -f "${{ runner.temp }}/test.txt"
