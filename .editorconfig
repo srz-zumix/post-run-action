@@ -16,6 +16,7 @@ end_of_line = lf
 [*.{yml,yaml}]
 indent_size = 2
 trim_trailing_whitespace = true
+max_line_length = 120
 
 [*.{json,ecrc}]
 indent_size = 2

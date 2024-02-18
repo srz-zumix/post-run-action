@@ -25975,7 +25975,7 @@ const exec = __importStar(__nccwpck_require__(1514));
 async function run() {
     try {
         const content = core.getInput('post-run', { required: true });
-        const scriptPath = process.env.RUNNER_TEMP + '/post-run.sh';
+        const scriptPath = (process.env.RUNNER_TEMP + '/post-run.sh');
         await fs_1.promises.writeFile(scriptPath, content);
         const bashPath = await io.which('bash', true);
         await exec.exec(`"${bashPath}"`, [scriptPath]);
