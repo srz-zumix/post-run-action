@@ -27852,14 +27852,14 @@ var exports = __webpack_exports__;
  */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __nccwpck_require__(2186);
-const fs = __nccwpck_require__(7561);
+const fs = (__nccwpck_require__(7561).promises);
 const io = __nccwpck_require__(7436);
 const exec = __nccwpck_require__(1514);
 async function run() {
     try {
         const content = core.getInput('post-run', { required: true });
         const scriptPath = process.env.RUNNTER_TEMP + "/post-run.sh";
-        fs.writeFile(scriptPath, content);
+        await fs.writeFile(scriptPath, content);
         const bashPath = await io.which('bash', true);
         await exec.exec(`"${bashPath}"`, [scriptPath]);
     }
