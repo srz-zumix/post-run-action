@@ -1,16 +1,16 @@
 {
-  "name": "javascript-action",
-  "description": "GitHub Actions JavaScript Template",
+  "name": "post-run-action",
+  "description": "GitHub Actions Post run action",
   "version": "0.0.0",
   "author": "",
   "private": true,
-  "homepage": "https://github.com/actions/javascript-action#readme",
+  "homepage": "https://github.com/srz-zumix/post-run-action#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/javascript-action.git"
+    "url": "git+https://github.com/srz-zumix/post-run-action.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/javascript-action/issues"
+    "url": "https://github.com/srz-zumix/post-run-action/issues"
   },
   "keywords": [
     "GitHub",
@@ -18,10 +18,10 @@
     "JavaScript"
   ],
   "exports": {
-    ".": "./dist/index.js"
+    ".": "./dist/main/index.js"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=16"
   },
   "scripts": {
     "bundle": "npm run format:write && npm run package",
@@ -29,7 +29,9 @@
     "format:write": "prettier --write **/*.js",
     "format:check": "prettier --check **/*.js",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "package": "ncc build src/index.js --license licenses.txt",
+    "package": "npm run package:main && npm run package:post",
+    "package:main": "ncc build src/main/index.js -o dist/main --license licenses.txt",
+    "package:post": "ncc build src/post/index.ts -o dist/post --license licenses.txt",
     "package:watch": "npm run package -- --watch",
     "test": "(jest && make-coverage-badge --output-path ./badges/coverage.svg) || make-coverage-badge --output-path ./badges/coverage.svg",
     "all": "npm run format:write && npm run lint && npm run test && npm run package"
@@ -63,7 +65,9 @@
     ]
   },
   "dependencies": {
-    "@actions/core": "^1.10.1"
+    "@actions/core": "^1.10.1",
+    "@actions/exec": "^1.1.0",
+    "@actions/io": "^1.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.23.9",
