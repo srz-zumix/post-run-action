@@ -121,9 +121,6 @@ jobs:
           post-run: |
             Write-Host "Hello World!!"
 
-      - run: echo "Hello World!!"
-        shell: cmd
-
       - name: Test Local Action (cmd)
         id: test-cmd
         uses: ./

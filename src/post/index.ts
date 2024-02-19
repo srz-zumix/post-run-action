@@ -62,7 +62,7 @@ async function run(): Promise<void> {
       .slice(1)
       .map(item => item.replace('{0}', scriptPath))
 
-    await exec.exec(`"${commandPath}"`, commandArgs)
+    await exec.exec(`"${commandPath}" ${commandArgs.join(' ')}`)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
