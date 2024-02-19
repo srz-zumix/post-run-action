@@ -31,11 +31,11 @@ async function run(): Promise<void> {
       
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
     const scriptPath = `${runnerTempPath}/post-run.sh`
+    await fs.writeFile(scriptPath, content)
 
     const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item)
 
-    await fs.writeFile(scriptPath, content)
-    await exec.exec(commandPath, [scriptPath])
+    await exec.exec(commandPath, commandArgs)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)

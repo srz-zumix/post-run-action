@@ -25994,9 +25994,9 @@ async function run() {
         const commandPath = await io.which(shellCommands[0], true);
         const runnerTempPath = process.env.RUNNER_TEMP;
         const scriptPath = `${runnerTempPath}/post-run.sh`;
-        const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item);
         await fs_1.promises.writeFile(scriptPath, content);
-        await exec.exec(commandPath, [scriptPath]);
+        const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item);
+        await exec.exec(commandPath, commandArgs);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
