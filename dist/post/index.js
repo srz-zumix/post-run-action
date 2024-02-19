@@ -25997,7 +25997,7 @@ function resolveExtension(command) {
         'python': 'py',
         'cmd': 'cmd',
         'pwsh': 'ps1',
-        'powershell': 'powershell'
+        'powershell': 'ps1'
     };
     if (command in commandExtensions) {
         return commandExtensions[command];
