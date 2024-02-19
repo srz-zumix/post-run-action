@@ -25981,7 +25981,7 @@ async function resolveShell() {
     if (!shellCommand) {
         return defaultCommands['default'];
     }
-    let shellCommands = shellCommand.split(' ');
+    const shellCommands = shellCommand.split(' ');
     if (shellCommands.length == 1) {
         if (shellCommands[0] in defaultCommands) {
             return defaultCommands[shellCommands[0]];

@@ -8,18 +8,18 @@ import * as io from '@actions/io'
 import * as exec from '@actions/exec'
 
 async function resolveShell(): Promise<string[]> {
-  const defaultCommands: { [key: string]: string[] }  = {
+  const defaultCommands: { [key: string]: string[] } = {
     'default': ['bash', '-e', '{0}'],
     'bash': ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
   }
   const shellCommand = core.getInput('shell', { required: false })
-  if(!shellCommand) {
+  if (!shellCommand) {
     return defaultCommands['default']
   }
 
-  let shellCommands = shellCommand.split(' ')
-  if(shellCommands.length == 1) {
-    if(shellCommands[0] in defaultCommands) {
+  const shellCommands = shellCommand.split(' ')
+  if (shellCommands.length == 1) {
+    if (shellCommands[0] in defaultCommands) {
       return defaultCommands[shellCommands[0]]
     } else {
       return [shellCommands[0], '{0}']
@@ -35,7 +35,7 @@ function resolveExtension(command: string): string {
     'pwsh': 'ps1',
     'powershell': 'ps1'
   }
-  if(command in commandExtensions) {
+  if (command in commandExtensions) {
     return commandExtensions[command]
   }
   return 'sh'
