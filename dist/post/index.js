@@ -25972,14 +25972,31 @@ const core = __importStar(__nccwpck_require__(2186));
 const fs_1 = __nccwpck_require__(7147);
 const io = __importStar(__nccwpck_require__(7436));
 const exec = __importStar(__nccwpck_require__(1514));
+async function resolveShell() {
+    const defaultCommands = {
+        'default': ['bash', '-e', '{0}'],
+        'bash': ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
+    };
+    const shellCommand = core.getInput('shell', { required: false });
+    let shellCommands = shellCommand.split(' ');
+    if (shellCommands.length == 0) {
+        shellCommands = defaultCommands['default'];
+    }
+    if (shellCommands.length == 1) {
+        shellCommands = defaultCommands[shellCommands[0]];
+    }
+    return shellCommands;
+}
 async function run() {
     try {
         const content = core.getInput('post-run', { required: true });
+        const shellCommands = await resolveShell();
+        const commandPath = await io.which(shellCommands[0], true);
         const runnerTempPath = process.env.RUNNER_TEMP;
         const scriptPath = `${runnerTempPath}/post-run.sh`;
+        const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item);
         await fs_1.promises.writeFile(scriptPath, content);
-        const bashPath = await io.which('bash', true);
-        await exec.exec(`"${bashPath}"`, [scriptPath]);
+        await exec.exec(commandPath, [scriptPath]);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
