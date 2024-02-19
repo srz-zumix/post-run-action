@@ -26014,7 +26014,7 @@ async function run() {
         const extension = resolveExtension(command);
         const scriptPath = `${runnerTempPath}/post-run.${extension}`;
         await fs_1.promises.writeFile(scriptPath, content);
-        const commandArgs = shellCommands.slice(1).map(item => item === '{0}' ? scriptPath : item);
+        const commandArgs = shellCommands.slice(1).map(item => (item === '{0}' ? scriptPath : item));
         await exec.exec(commandPath, commandArgs);
     }
     catch (error) {

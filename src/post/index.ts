@@ -47,13 +47,13 @@ async function run(): Promise<void> {
     const shellCommands: string[] = await resolveShell()
     const command = shellCommands[0]
     const commandPath: string = await io.which(command, true)
-      
+
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
     const extension: string = resolveExtension(command)
     const scriptPath = `${runnerTempPath}/post-run.${extension}`
     await fs.writeFile(scriptPath, content)
 
-    const commandArgs = shellCommands.slice(1).map(item => item === '{0}' ? scriptPath : item)
+    const commandArgs = shellCommands.slice(1).map(item => (item === '{0}' ? scriptPath : item))
 
     await exec.exec(commandPath, commandArgs)
   } catch (error) {
