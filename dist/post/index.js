@@ -25978,10 +25978,10 @@ async function resolveShell() {
         'bash': ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
     };
     const shellCommand = core.getInput('shell', { required: false });
-    let shellCommands = shellCommand.split(' ');
-    if (shellCommands.length == 0) {
-        shellCommands = defaultCommands['default'];
+    if (!shellCommand) {
+        return defaultCommands['default'];
     }
+    let shellCommands = shellCommand.split(' ');
     if (shellCommands.length == 1) {
         shellCommands = defaultCommands[shellCommands[0]];
     }

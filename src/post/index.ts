@@ -12,11 +12,12 @@ async function resolveShell(): Promise<string[]> {
     'default': [ 'bash', '-e', '{0}' ],
     'bash': [ 'bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}' ]
   }
-  const shellCommand: string = core.getInput('shell', { required: false })
-  let shellCommands = shellCommand.split(' ')
-  if( shellCommands.length == 0 ) {
-    shellCommands = defaultCommands['default']
+  const shellCommand = core.getInput('shell', { required: false })
+  if( !shellCommand ) {
+    return defaultCommands['default']
   }
+
+  let shellCommands = shellCommand.split(' ')
   if( shellCommands.length == 1 ) {
     shellCommands = defaultCommands[shellCommands[0]]
   }
