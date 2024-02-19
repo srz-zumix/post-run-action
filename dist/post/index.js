@@ -25978,7 +25978,7 @@ async function resolveShell() {
         default: ['bash', '-e', '{0}'],
         sh: ['sh', '-e', '{0}'],
         bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}'],
-        cmd: ['cmd', '/D', '/E:ON', '/V:OFF', '/S', '/C', 'CALL "{0}"'],
+        cmd: ['cmd', '/D', '/E:ON', '/V:OFF', '/S', '/C', "CALL '{0}'"],
         pwsh: ['pwsh', '-command', ". '{0}'"],
         powershell: ['powershell', '-command', ". '{0}'"]
     };
