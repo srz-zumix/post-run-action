@@ -25974,15 +25974,15 @@ const io = __importStar(__nccwpck_require__(7436));
 const exec = __importStar(__nccwpck_require__(1514));
 async function resolveShell() {
     const defaultCommands = {
-        'default': ['bash', '-e', '{0}'],
-        'bash': ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
+        default: ['bash', '-e', '{0}'],
+        bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
     };
     const shellCommand = core.getInput('shell', { required: false });
     if (!shellCommand) {
         return defaultCommands['default'];
     }
     const shellCommands = shellCommand.split(' ');
-    if (shellCommands.length == 1) {
+    if (shellCommands.length === 1) {
         if (shellCommands[0] in defaultCommands) {
             return defaultCommands[shellCommands[0]];
         }
@@ -25994,10 +25994,10 @@ async function resolveShell() {
 }
 function resolveExtension(command) {
     const commandExtensions = {
-        'python': 'py',
-        'cmd': 'cmd',
-        'pwsh': 'ps1',
-        'powershell': 'ps1'
+        python: 'py',
+        cmd: 'cmd',
+        pwsh: 'ps1',
+        powershell: 'ps1'
     };
     if (command in commandExtensions) {
         return commandExtensions[command];
@@ -26014,7 +26014,7 @@ async function run() {
         const extension = resolveExtension(command);
         const scriptPath = `${runnerTempPath}/post-run.${extension}`;
         await fs_1.promises.writeFile(scriptPath, content);
-        const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item);
+        const commandArgs = shellCommands.slice(1).map(item => item === '{0}' ? scriptPath : item);
         await exec.exec(commandPath, commandArgs);
     }
     catch (error) {

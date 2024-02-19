@@ -9,8 +9,8 @@ import * as exec from '@actions/exec'
 
 async function resolveShell(): Promise<string[]> {
   const defaultCommands: { [key: string]: string[] } = {
-    'default': ['bash', '-e', '{0}'],
-    'bash': ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
+    default: ['bash', '-e', '{0}'],
+    bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
   }
   const shellCommand = core.getInput('shell', { required: false })
   if (!shellCommand) {
@@ -18,7 +18,7 @@ async function resolveShell(): Promise<string[]> {
   }
 
   const shellCommands = shellCommand.split(' ')
-  if (shellCommands.length == 1) {
+  if (shellCommands.length === 1) {
     if (shellCommands[0] in defaultCommands) {
       return defaultCommands[shellCommands[0]]
     } else {
@@ -29,11 +29,11 @@ async function resolveShell(): Promise<string[]> {
 }
 
 function resolveExtension(command: string): string {
-  const commandExtensions: { [key: string]: string }  = {
-    'python': 'py',
-    'cmd': 'cmd',
-    'pwsh': 'ps1',
-    'powershell': 'ps1'
+  const commandExtensions: { [key: string]: string } = {
+    python: 'py',
+    cmd: 'cmd',
+    pwsh: 'ps1',
+    powershell: 'ps1'
   }
   if (command in commandExtensions) {
     return commandExtensions[command]
@@ -53,7 +53,7 @@ async function run(): Promise<void> {
     const scriptPath = `${runnerTempPath}/post-run.${extension}`
     await fs.writeFile(scriptPath, content)
 
-    const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item)
+    const commandArgs = shellCommands.slice(1).map(item => item === '{0}' ? scriptPath : item)
 
     await exec.exec(commandPath, commandArgs)
   } catch (error) {
