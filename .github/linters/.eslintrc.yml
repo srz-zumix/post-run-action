@@ -77,7 +77,7 @@ rules:
     '@typescript-eslint/require-array-sort-compare': 'error',
     '@typescript-eslint/restrict-plus-operands': 'error',
     '@typescript-eslint/semi': ['error', 'never'],
-    '@typescript-eslint/space-before-function-paren': 'on',
+    '@typescript-eslint/space-before-function-paren': 'warn',
     '@typescript-eslint/type-annotation-spacing': 'error',
     '@typescript-eslint/unbound-method': 'error'
   }
