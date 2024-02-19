@@ -7,7 +7,7 @@ import { promises as fs } from 'fs'
 import * as io from '@actions/io'
 import * as exec from '@actions/exec'
 
-async function run(): Promise<void> {
+async function run (): Promise<void> {
   try {
     const content = core.getInput('post-run', { required: true })
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
