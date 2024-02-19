@@ -26014,6 +26014,9 @@ async function run() {
         const shellCommands = await resolveShell();
         const command = shellCommands[0];
         const commandPath = await io.which(command, true);
+        if (command === 'cmd') {
+            core.addPath('C:\\Windows\\system32');
+        }
         const runnerTempPath = process.env.RUNNER_TEMP;
         const extension = resolveExtension(command);
         const scriptPath = `${runnerTempPath}/post-run.${extension}`;

@@ -52,6 +52,10 @@ async function run(): Promise<void> {
     const command = shellCommands[0]
     const commandPath: string = await io.which(command, true)
 
+    if (command === 'cmd') {
+      core.addPath('C:\\Windows\\system32')
+    }
+
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
     const extension: string = resolveExtension(command)
     const scriptPath = `${runnerTempPath}/post-run.${extension}`
