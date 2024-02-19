@@ -1,19 +1,13 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Post Run Action'
+description: 'set post run script action'
+author: 'https://github.com/srz-zumix'
 
-# Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  post-run:
+    description: 'post run script text'
     required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
 
 runs:
-  using: node20
-  main: dist/index.js
+  using: node16
+  main: dist/main/index.js
+  post: dist/post/index.js

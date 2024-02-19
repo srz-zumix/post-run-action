@@ -55,8 +55,12 @@ jobs:
         id: test-action
         uses: ./
         with:
-          milliseconds: 1000
+          post-run: |
+            echo "test" | tee "${{ runner.temp }}/test.txt"
+            if [ -f "${{ runner.temp }}/post.sh" ]; then
+              "${{ runner.temp }}/post.sh"
+            fi
 
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+      - name: Test file
+        run: |
+          test ! -f "${{ runner.temp }}/test.txt"
