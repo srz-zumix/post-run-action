@@ -22,6 +22,8 @@ jobs:
   publish_release:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
+    outputs:
+      tag_name: ${{ steps.release-drafter.outputs.tag_name }}
     steps:
       - uses: release-drafter/release-drafter@v6
         id: release-drafter
@@ -33,3 +35,5 @@ jobs:
   update_semver:
     needs: publish_release
     uses: srz-zumix/post-run-action/.github/workflows/update_semver.yml@main
+    with:
+      tag: ${{ needs.publish_release.outputs.tag_name }}
