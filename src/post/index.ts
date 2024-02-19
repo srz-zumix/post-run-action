@@ -4,6 +4,7 @@
 
 import * as core from '@actions/core'
 import { promises as fs } from 'fs'
+import { v4 as uuidv4 } from 'uuid'
 import * as path from 'path'
 import * as io from '@actions/io'
 import * as exec from '@actions/exec'
@@ -55,7 +56,9 @@ async function run(): Promise<void> {
 
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
     const extension: string = resolveExtension(command)
-    const scriptPath = path.join(runnerTempPath, `post-run.${extension}`)
+    const uniqueId = uuidv4()
+    const scriptFileName = `post-run-action-${uniqueId}.${extension}`
+    const scriptPath = path.join(runnerTempPath, scriptFileName)
     await fs.writeFile(scriptPath, content)
 
     const commandArgs = shellCommands
