@@ -11,6 +11,12 @@ See [action.yml](./action.yml)
 - name: Post Action
   uses: srz-zumix/post-run-action@main
   with:
+    # custom shell
+    # Default : bash -e {0}
+    # bash    : bash --noprofile --norc -eo pipefail {0}
+    # custom  : e.g. `bash -l -ex {0}`
+    # see https://docs.github.com/ja/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+    shell: base -ex {0}
     # post run script text
     post-run: |
       echo "test" | tee "${{ runner.temp }}/test.txt"
