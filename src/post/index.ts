@@ -62,7 +62,7 @@ async function run(): Promise<void> {
       .slice(1)
       .map(item => item.replace('{0}', scriptPath))
 
-    const options: exec.ExecOptions = {};
+    const options: exec.ExecOptions = {}
     options.windowsVerbatimArguments = command === 'cmd'
 
     await exec.exec(`"${commandPath}"`, commandArgs, options)
