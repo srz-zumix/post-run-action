@@ -61,6 +61,17 @@ jobs:
               "${{ runner.temp }}/post.sh"
             fi
 
+      - name: Test Local Action
+        id: test-action2
+        uses: ./
+        with:
+          shell: bash -l -ex {0}
+          post-run: |
+            echo "test" | tee "${{ runner.temp }}/test.txt"
+            if [ -f "${{ runner.temp }}/post.sh" ]; then
+              "${{ runner.temp }}/post.sh"
+            fi
+
       - name: Test file
         run: |
           test ! -f "${{ runner.temp }}/test.txt"
