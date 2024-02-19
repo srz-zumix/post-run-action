@@ -50,6 +50,9 @@ jobs:
       - name: Checkout
         id: checkout
         uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
 
       - name: Test Local Action
         id: test-action
@@ -61,8 +64,8 @@ jobs:
               "${{ runner.temp }}/post.sh"
             fi
 
-      - name: Test Local Action
-        id: test-action2
+      - name: Test Local Action (login shell)
+        id: test-longin-shell
         uses: ./
         with:
           shell: bash -l -ex {0}
@@ -71,6 +74,14 @@ jobs:
             if [ -f "${{ runner.temp }}/post.sh" ]; then
               "${{ runner.temp }}/post.sh"
             fi
+
+      - name: Test Local Action (Python)
+        id: test-python
+        uses: ./
+        with:
+          shell: python
+          post-run: |
+            print("Hello, world!")
 
       - name: Test file
         run: |

@@ -25983,17 +25983,33 @@ async function resolveShell() {
     }
     let shellCommands = shellCommand.split(' ');
     if (shellCommands.length == 1) {
-        shellCommands = defaultCommands[shellCommands[0]];
+        if (shellCommands[0] in defaultCommands) {
+            return defaultCommands[shellCommands[0]];
+        }
     }
     return shellCommands;
+}
+function resolveExtension(command) {
+    const commandExtensions = {
+        'python': 'py',
+        'cmd': 'cmd',
+        'pwsh': 'ps1',
+        'powershell': 'powershell'
+    };
+    if (command in commandExtensions) {
+        return commandExtensions[command];
+    }
+    return 'sh';
 }
 async function run() {
     try {
         const content = core.getInput('post-run', { required: true });
         const shellCommands = await resolveShell();
-        const commandPath = await io.which(shellCommands[0], true);
+        const command = shellCommands[0];
+        const commandPath = await io.which(command, true);
         const runnerTempPath = process.env.RUNNER_TEMP;
-        const scriptPath = `${runnerTempPath}/post-run.sh`;
+        const extension = resolveExtension(command);
+        const scriptPath = `${runnerTempPath}/post-run.${extension}`;
         await fs_1.promises.writeFile(scriptPath, content);
         const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item);
         await exec.exec(commandPath, commandArgs);

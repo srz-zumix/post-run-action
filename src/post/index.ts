@@ -19,19 +19,36 @@ async function resolveShell(): Promise<string[]> {
 
   let shellCommands = shellCommand.split(' ')
   if( shellCommands.length == 1 ) {
-    shellCommands = defaultCommands[shellCommands[0]]
+    if( shellCommands[0] in defaultCommands ) {
+      return defaultCommands[shellCommands[0]]
+    }
   }
   return shellCommands
+}
+
+function resolveExtension(command:string): string {
+  const commandExtensions: {[key: string]: string}  = {
+    'python': 'py',
+    'cmd': 'cmd',
+    'pwsh': 'ps1',
+    'powershell': 'powershell'
+  }
+  if( command in commandExtensions ) {
+    return commandExtensions[command]
+  }
+  return 'sh'
 }
 
 async function run(): Promise<void> {
   try {
     const content: string = core.getInput('post-run', { required: true })
     const shellCommands: string[] = await resolveShell()
-    const commandPath: string = await io.which(shellCommands[0], true)
+    const command = shellCommands[0]
+    const commandPath: string = await io.which(command, true)
       
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
-    const scriptPath = `${runnerTempPath}/post-run.sh`
+    const extension: string = resolveExtension(command)
+    const scriptPath = `${runnerTempPath}/post-run.${extension}`
     await fs.writeFile(scriptPath, content)
 
     const commandArgs = shellCommands.slice(1).map((item) => item === '{0}' ? scriptPath : item)
