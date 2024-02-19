@@ -10,7 +10,11 @@ import * as exec from '@actions/exec'
 async function resolveShell(): Promise<string[]> {
   const defaultCommands: { [key: string]: string[] } = {
     default: ['bash', '-e', '{0}'],
-    bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
+    sh: ['sh', '-e', '{0}'],
+    bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}'],
+    cmd: ['%ComSpec%', '/D', '/E:ON', '/V:OFF', '/S', '/C', 'CALL "{0}"'],
+    pwsh: ['pwsh', '-command', '. \'{0}\''],
+    powershell: ['powershell', '-command', '. \'{0}\'']
   }
   const shellCommand = core.getInput('shell', { required: false })
   if (!shellCommand) {
@@ -53,7 +57,7 @@ async function run(): Promise<void> {
     const scriptPath = `${runnerTempPath}/post-run.${extension}`
     await fs.writeFile(scriptPath, content)
 
-    const commandArgs = shellCommands.slice(1).map(item => (item === '{0}' ? scriptPath : item))
+    const commandArgs = shellCommands.slice(1).map(item => item.replace('{0}', scriptPath))
 
     await exec.exec(commandPath, commandArgs)
   } catch (error) {

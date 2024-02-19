@@ -86,3 +86,53 @@ jobs:
       - name: Test file
         run: |
           test ! -f "${{ runner.temp }}/test.txt"
+
+  test-action-windows:
+    name: GitHub Actions Test (Windows)
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Test Local Action
+        id: test-action
+        uses: ./
+        with:
+          post-run: |
+            echo "test" | tee "${{ runner.temp }}/test.txt"
+            if [ -f "${{ runner.temp }}/post.sh" ]; then
+              "${{ runner.temp }}/post.sh"
+            fi
+
+      - name: Test Local Action (pwsh)
+        id: test-pwsh
+        uses: ./
+        with:
+          shell: pwsh
+          post-run: |
+            Write-Host "Hello World!!"
+
+      - name: Test Local Action (cmd)
+        id: test-cmd
+        uses: ./
+        with:
+          shell: cmd
+          post-run: |
+            echo "Hello World!!"
+
+      - name: Test Local Action (Python)
+        id: test-python
+        uses: ./
+        with:
+          shell: python
+          post-run: |
+            print("Hello, world!")
+
+      - name: Test file
+        run: |
+          test ! -f "${{ runner.temp }}/test.txt"
