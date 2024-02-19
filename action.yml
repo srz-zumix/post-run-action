@@ -6,6 +6,13 @@ inputs:
   post-run:
     description: 'post run script text'
     required: true
+  shell:
+    # Default : bash -e {0}
+    # bash    : bash --noprofile --norc -eo pipefail {0}
+    # custom  : e.g. `bash -l -ex {0}`
+    # see https://docs.github.com/ja/actions/using-workflows/workflow-syntax-for-github-actions#jobsjob_idstepsshell
+    description: 'custom shell command'
+    default: ""
 
 runs:
   using: node16

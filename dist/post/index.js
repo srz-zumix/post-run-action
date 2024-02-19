@@ -25970,16 +25970,61 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const fs_1 = __nccwpck_require__(7147);
+const path = __importStar(__nccwpck_require__(1017));
 const io = __importStar(__nccwpck_require__(7436));
 const exec = __importStar(__nccwpck_require__(1514));
+async function resolveShell() {
+    const defaultCommands = {
+        default: ['bash', '-e', '{0}'],
+        sh: ['sh', '-e', '{0}'],
+        bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}'],
+        cmd: ['cmd', '/D', '/E:ON', '/V:OFF', '/S', '/C', '"CALL "{0}""'],
+        pwsh: ['pwsh', '-command', ". '{0}'"],
+        powershell: ['powershell', '-command', ". '{0}'"]
+    };
+    const shellCommand = core.getInput('shell', { required: false });
+    if (!shellCommand) {
+        return defaultCommands['default'];
+    }
+    const shellCommands = shellCommand.split(' ');
+    if (shellCommands.length === 1) {
+        if (shellCommands[0] in defaultCommands) {
+            return defaultCommands[shellCommands[0]];
+        }
+        else {
+            return [shellCommands[0], '{0}'];
+        }
+    }
+    return shellCommands;
+}
+function resolveExtension(command) {
+    const commandExtensions = {
+        python: 'py',
+        cmd: 'cmd',
+        pwsh: 'ps1',
+        powershell: 'ps1'
+    };
+    if (command in commandExtensions) {
+        return commandExtensions[command];
+    }
+    return 'sh';
+}
 async function run() {
     try {
         const content = core.getInput('post-run', { required: true });
+        const shellCommands = await resolveShell();
+        const command = shellCommands[0];
+        const commandPath = await io.which(command, true);
         const runnerTempPath = process.env.RUNNER_TEMP;
-        const scriptPath = `${runnerTempPath}/post-run.sh`;
+        const extension = resolveExtension(command);
+        const scriptPath = path.join(runnerTempPath, `post-run.${extension}`);
         await fs_1.promises.writeFile(scriptPath, content);
-        const bashPath = await io.which('bash', true);
-        await exec.exec(`"${bashPath}"`, [scriptPath]);
+        const commandArgs = shellCommands
+            .slice(1)
+            .map(item => item.replace('{0}', scriptPath));
+        const options = {};
+        options.windowsVerbatimArguments = command === 'cmd';
+        await exec.exec(`"${commandPath}"`, commandArgs, options);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
