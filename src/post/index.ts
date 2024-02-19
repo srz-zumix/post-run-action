@@ -4,6 +4,7 @@
 
 import * as core from '@actions/core'
 import { promises as fs } from 'fs'
+import * as path from 'path';
 import * as io from '@actions/io'
 import * as exec from '@actions/exec'
 
@@ -35,7 +36,7 @@ async function resolveShell(): Promise<string[]> {
 function resolveExtension(command: string): string {
   const commandExtensions: { [key: string]: string } = {
     python: 'py',
-    cmd: 'bat',
+    cmd: 'cmd',
     pwsh: 'ps1',
     powershell: 'ps1'
   }
@@ -54,7 +55,7 @@ async function run(): Promise<void> {
 
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
     const extension: string = resolveExtension(command)
-    const scriptPath = `${runnerTempPath}/post-run.${extension}`
+    const scriptPath = path.join(runnerTempPath, `post-run.${extension}`)
     await fs.writeFile(scriptPath, content)
 
     const commandArgs = shellCommands

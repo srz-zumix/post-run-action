@@ -25970,6 +25970,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const fs_1 = __nccwpck_require__(7147);
+const path = __importStar(__nccwpck_require__(1017));
 const io = __importStar(__nccwpck_require__(7436));
 const exec = __importStar(__nccwpck_require__(1514));
 async function resolveShell() {
@@ -25999,7 +26000,7 @@ async function resolveShell() {
 function resolveExtension(command) {
     const commandExtensions = {
         python: 'py',
-        cmd: 'bat',
+        cmd: 'cmd',
         pwsh: 'ps1',
         powershell: 'ps1'
     };
@@ -26016,7 +26017,7 @@ async function run() {
         const commandPath = await io.which(command, true);
         const runnerTempPath = process.env.RUNNER_TEMP;
         const extension = resolveExtension(command);
-        const scriptPath = `${runnerTempPath}/post-run.${extension}`;
+        const scriptPath = path.join(runnerTempPath, `post-run.${extension}`);
         await fs_1.promises.writeFile(scriptPath, content);
         const commandArgs = shellCommands
             .slice(1)
