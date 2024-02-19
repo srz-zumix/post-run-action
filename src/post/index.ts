@@ -13,7 +13,7 @@ async function resolveShell(): Promise<string[]> {
     default: ['bash', '-e', '{0}'],
     sh: ['sh', '-e', '{0}'],
     bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}'],
-    cmd: ['cmd', '/D', '/E:ON', '/V:OFF', '/S', '/C', '"CALL \\"{0}\\""'],
+    cmd: ['cmd', '/D', '/E:ON', '/V:OFF', '/S', '/C', '"CALL "{0}""'],
     pwsh: ['pwsh', '-command', '". \'{0}\'"'],
     powershell: ['powershell', '-command', '". \'{0}\'"']
   }
@@ -62,7 +62,7 @@ async function run(): Promise<void> {
       .slice(1)
       .map(item => item.replace('{0}', scriptPath))
 
-    await exec.exec(`"${commandPath}" ${commandArgs.join(' ')}`)
+    await exec.exec(`"${commandPath}"`, commandArgs)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
