@@ -35,7 +35,7 @@ async function resolveShell(): Promise<string[]> {
 function resolveExtension(command: string): string {
   const commandExtensions: { [key: string]: string } = {
     python: 'py',
-    cmd: 'cmd',
+    cmd: 'bat',
     pwsh: 'ps1',
     powershell: 'ps1'
   }
@@ -51,10 +51,6 @@ async function run(): Promise<void> {
     const shellCommands: string[] = await resolveShell()
     const command = shellCommands[0]
     const commandPath: string = await io.which(command, true)
-
-    if (command === 'cmd') {
-      core.addPath('C:\\Windows\\system32')
-    }
 
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
     const extension: string = resolveExtension(command)
