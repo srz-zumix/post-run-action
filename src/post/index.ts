@@ -21,6 +21,8 @@ async function resolveShell(): Promise<string[]> {
   if( shellCommands.length == 1 ) {
     if( shellCommands[0] in defaultCommands ) {
       return defaultCommands[shellCommands[0]]
+    } else {
+      return [shellCommands[0], '{0}']
     }
   }
   return shellCommands
