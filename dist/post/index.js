@@ -25975,7 +25975,11 @@ const exec = __importStar(__nccwpck_require__(1514));
 async function resolveShell() {
     const defaultCommands = {
         default: ['bash', '-e', '{0}'],
-        bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}']
+        sh: ['sh', '-e', '{0}'],
+        bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}'],
+        cmd: ['%ComSpec%', '/D', '/E:ON', '/V:OFF', '/S', '/C', 'CALL "{0}"'],
+        pwsh: ['pwsh', '-command', '. \'{0}\''],
+        powershell: ['powershell', '-command', ". '{0}'"]
     };
     const shellCommand = core.getInput('shell', { required: false });
     if (!shellCommand) {
@@ -26014,7 +26018,9 @@ async function run() {
         const extension = resolveExtension(command);
         const scriptPath = `${runnerTempPath}/post-run.${extension}`;
         await fs_1.promises.writeFile(scriptPath, content);
-        const commandArgs = shellCommands.slice(1).map(item => (item === '{0}' ? scriptPath : item));
+        const commandArgs = shellCommands
+            .slice(1)
+            .map(item => item.replace('{0}', scriptPath));
         await exec.exec(commandPath, commandArgs);
     }
     catch (error) {
