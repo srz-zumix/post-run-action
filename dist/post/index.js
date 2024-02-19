@@ -25978,7 +25978,7 @@ async function resolveShell() {
         sh: ['sh', '-e', '{0}'],
         bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}'],
         cmd: ['%ComSpec%', '/D', '/E:ON', '/V:OFF', '/S', '/C', 'CALL "{0}"'],
-        pwsh: ['pwsh', '-command', ". '{0}\'"],
+        pwsh: ['pwsh', '-command', ". '{0}'"],
         powershell: ['powershell', '-command', ". '{0}'"]
     };
     const shellCommand = core.getInput('shell', { required: false });
@@ -26021,7 +26021,7 @@ async function run() {
         const commandArgs = shellCommands
             .slice(1)
             .map(item => item.replace('{0}', scriptPath));
-        await exec.exec(commandPath, commandArgs);
+        await exec.exec(`"${commandPath}"`, commandArgs);
     }
     catch (error) {
         // Fail the workflow run if an error occurs
