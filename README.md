@@ -9,7 +9,7 @@ See [action.yml](./action.yml)
 
 ```yaml
 - name: Post Action
-  uses: srz-zumix/post-run-action@main
+  uses: srz-zumix/post-run-action@v1
   with:
     # custom shell
     # Default : bash -e {0}
