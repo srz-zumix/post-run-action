@@ -1,39 +1,55 @@
-name: Release drafter
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+name-template: 'v$RESOLVED_VERSION'
+tag-template: 'v$RESOLVED_VERSION'
+categories:
+  - title: 'BREAKING CHANGES'
+    labels:
+      - 'BREAKING CHANGE'
+  - title: 'Features'
+    labels:
+      - 'feature'
+      - 'enhancement'
+  - title: 'Fixes'
+    labels:
+      - 'fix'
+      - 'bug'
+      - 'security'
+  - title: 'Dependencies'
+    collapse-after: 3
+    labels:
+      - 'dependencies'
+      - 'renovate'
+  - title: 'Documentation'
+    labels:
+      - 'document'
+      - 'documentation'
+exclude-labels:
+  - 'invalid'
+  - 'internal-fix'
+  - 'misc'
+  - 'ci'
+change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
+change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
+version-resolver:
+  major:
+    labels:
+      - 'BREAKING CHANGE'
+      - 'major'
+  minor:
+    labels:
+      - 'feature'
+      - 'enhancement'
+      - 'minor'
+  patch:
+    labels:
+      - 'improvement'
+      - 'fix'
+      - 'bug'
+      - 'security'
+      - 'patch'
+  default: patch
+template: |
+  [Compare $PREVIOUS_TAG with v$RESOLVED_VERSION](https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION)
 
-permissions:
-  contents: write
-  pull-requests: read
+  ## Changes
 
-jobs:
-  draft_release:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
-    steps:
-      - uses: release-drafter/release-drafter@v6
-        id: release-drafter
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  publish_release:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
-    outputs:
-      tag_name: ${{ steps.release-drafter.outputs.tag_name }}
-    steps:
-      - uses: release-drafter/release-drafter@v6
-        id: release-drafter
-        with:
-          publish: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  update_semver:
-    needs: publish_release
-    uses: srz-zumix/post-run-action/.github/workflows/update_semver.yml@main
-    with:
-      tag: ${{ needs.publish_release.outputs.tag_name }}
+  $CHANGES
