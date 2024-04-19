@@ -13,13 +13,19 @@ categories:
       - 'fix'
       - 'bug'
       - 'security'
+  - title: 'Dependencies'
+    collapse-after: 3
+    labels:
+      - 'dependencies'
+      - 'renovate'
   - title: 'Documentation'
     labels:
       - 'document'
       - 'documentation'
 exclude-labels:
-  - 'dependencies'
-  - 'renovate'
+  - 'invalid'
+  - 'internal-fix'
+  - 'misc'
   - 'ci'
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
@@ -27,18 +33,23 @@ version-resolver:
   major:
     labels:
       - 'BREAKING CHANGE'
+      - 'major'
   minor:
     labels:
       - 'feature'
       - 'enhancement'
+      - 'minor'
   patch:
     labels:
       - 'improvement'
       - 'fix'
       - 'bug'
       - 'security'
+      - 'patch'
   default: patch
 template: |
-  [Compare $PREVIOUS_TAG with v$RESOLVED_VERSION](https://github.com/srz-zumix/setup-service-jenkins/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION)
+  [Compare $PREVIOUS_TAG with v$RESOLVED_VERSION](https://github.com/$OWNER/$REPOSITORY/compare/$PREVIOUS_TAG...v$RESOLVED_VERSION)
+
   ## Changes
+
   $CHANGES
