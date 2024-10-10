@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","mappings":";;;AAAA;AACA;;;;;;;;ACDA;;AAEA;;AAEA","sources":["../webpack/runtime/compat",".././src/main/index.ts"],"sourcesContent":["\nif (typeof __webpack_require__ !== 'undefined') __webpack_require__.ab = __dirname + \"/\";","/**\n * The entrypoint for the action.\n */\n\nconsole.log('post-run-action')\n"],"names":[],"sourceRoot":""}

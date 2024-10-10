@@ -33,7 +33,9 @@
     "format:write": "npx prettier --write **/*.ts",
     "format:check": "npx prettier --check **/*.ts",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
-    "package": "npx ncc build src/main/index.ts -o dist/main --source-map --license licenses.txt",
+    "package": "npm run package:main && npm run package:post",
+    "package:main": "ncc build src/main/index.ts -o dist/main --license licenses.txt",
+    "package:post": "ncc build src/post/index.ts -o dist/post --license licenses.txt",
     "package:watch": "npm run package -- --watch",
     "test": "npx jest --passWithNoTests",
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"

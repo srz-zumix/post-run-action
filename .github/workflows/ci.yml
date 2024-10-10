@@ -2,6 +2,8 @@ name: Continuous Integration
 
 on:
   pull_request:
+    branches:
+      - main
   push:
     branches:
       - main
@@ -14,8 +16,8 @@ permissions:
   contents: read
 
 jobs:
-  test-javascript:
-    name: JavaScript Tests
+  test-typescript:
+    name: TypeScript Tests
     runs-on: ubuntu-latest
 
     steps:
