@@ -9,7 +9,7 @@ See [action.yml](./action.yml)
 
 ```yaml
 - name: Post Action
-  uses: srz-zumix/post-run-action@v1
+  uses: srz-zumix/post-run-action@v2
   with:
     # custom shell
     # Default : bash -e {0}
@@ -25,7 +25,7 @@ See [action.yml](./action.yml)
       fi
 - name: Post Action (Python)
   id: test-python
-  uses: srz-zumix/post-run-action@v1
+  uses: srz-zumix/post-run-action@v2
   with:
     shell: python
     post-run: |
