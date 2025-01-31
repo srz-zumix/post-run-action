@@ -27729,7 +27729,6 @@ exports["default"] = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports["default"] = rng;
 const crypto_1 = __nccwpck_require__(6982);
 const rnds8Pool = new Uint8Array(256);
 let poolPtr = rnds8Pool.length;
@@ -27740,6 +27739,7 @@ function rng() {
     }
     return rnds8Pool.slice(poolPtr, (poolPtr += 16));
 }
+exports["default"] = rng;
 
 
 /***/ }),
@@ -27771,7 +27771,7 @@ exports["default"] = sha1;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.unsafeStringify = unsafeStringify;
+exports.unsafeStringify = void 0;
 const validate_js_1 = __nccwpck_require__(5182);
 const byteToHex = [];
 for (let i = 0; i < 256; ++i) {
@@ -27799,6 +27799,7 @@ function unsafeStringify(arr, offset = 0) {
         byteToHex[arr[offset + 14]] +
         byteToHex[arr[offset + 15]]).toLowerCase();
 }
+exports.unsafeStringify = unsafeStringify;
 function stringify(arr, offset = 0) {
     const uuid = unsafeStringify(arr, offset);
     if (!(0, validate_js_1.default)(uuid)) {
@@ -27817,7 +27818,7 @@ exports["default"] = stringify;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.updateV1State = updateV1State;
+exports.updateV1State = void 0;
 const rng_js_1 = __nccwpck_require__(5983);
 const stringify_js_1 = __nccwpck_require__(9687);
 const _state = {};
@@ -27865,10 +27866,19 @@ function updateV1State(state, now, rnds) {
     state.msecs = now;
     return state;
 }
+exports.updateV1State = updateV1State;
 function v1Bytes(rnds, msecs, nsecs, clockseq, node, buf, offset = 0) {
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
     if (!buf) {
         buf = new Uint8Array(16);
         offset = 0;
+    }
+    else {
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
     }
     msecs ??= Date.now();
     nsecs ??= 0;
@@ -27903,7 +27913,6 @@ exports["default"] = v1;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports["default"] = v1ToV6;
 const parse_js_1 = __nccwpck_require__(2713);
 const stringify_js_1 = __nccwpck_require__(9687);
 function v1ToV6(uuid) {
@@ -27911,6 +27920,7 @@ function v1ToV6(uuid) {
     const v6Bytes = _v1ToV6(v1Bytes);
     return typeof uuid === 'string' ? (0, stringify_js_1.unsafeStringify)(v6Bytes) : v6Bytes;
 }
+exports["default"] = v1ToV6;
 function _v1ToV6(v1Bytes) {
     return Uint8Array.of(((v1Bytes[6] & 0x0f) << 4) | ((v1Bytes[7] >> 4) & 0x0f), ((v1Bytes[7] & 0x0f) << 4) | ((v1Bytes[4] & 0xf0) >> 4), ((v1Bytes[4] & 0x0f) << 4) | ((v1Bytes[5] & 0xf0) >> 4), ((v1Bytes[5] & 0x0f) << 4) | ((v1Bytes[0] & 0xf0) >> 4), ((v1Bytes[0] & 0x0f) << 4) | ((v1Bytes[1] & 0xf0) >> 4), ((v1Bytes[1] & 0x0f) << 4) | ((v1Bytes[2] & 0xf0) >> 4), 0x60 | (v1Bytes[2] & 0x0f), v1Bytes[3], v1Bytes[8], v1Bytes[9], v1Bytes[10], v1Bytes[11], v1Bytes[12], v1Bytes[13], v1Bytes[14], v1Bytes[15]);
 }
@@ -27946,9 +27956,7 @@ exports["default"] = v3;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.URL = exports.DNS = void 0;
-exports.stringToBytes = stringToBytes;
-exports["default"] = v35;
+exports.URL = exports.DNS = exports.stringToBytes = void 0;
 const parse_js_1 = __nccwpck_require__(2713);
 const stringify_js_1 = __nccwpck_require__(9687);
 function stringToBytes(str) {
@@ -27959,6 +27967,7 @@ function stringToBytes(str) {
     }
     return bytes;
 }
+exports.stringToBytes = stringToBytes;
 exports.DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
 exports.URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
 function v35(version, hash, value, namespace, buf, offset) {
@@ -27985,6 +27994,7 @@ function v35(version, hash, value, namespace, buf, offset) {
     }
     return (0, stringify_js_1.unsafeStringify)(bytes);
 }
+exports["default"] = v35;
 
 
 /***/ }),
@@ -28003,11 +28013,17 @@ function v4(options, buf, offset) {
         return native_js_1.default.randomUUID();
     }
     options = options || {};
-    const rnds = options.random || (options.rng || rng_js_1.default)();
+    const rnds = options.random ?? options.rng?.() ?? (0, rng_js_1.default)();
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
     rnds[6] = (rnds[6] & 0x0f) | 0x40;
     rnds[8] = (rnds[8] & 0x3f) | 0x80;
     if (buf) {
         offset = offset || 0;
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
         for (let i = 0; i < 16; ++i) {
             buf[offset + i] = rnds[i];
         }
@@ -28075,7 +28091,6 @@ exports["default"] = v6;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports["default"] = v6ToV1;
 const parse_js_1 = __nccwpck_require__(2713);
 const stringify_js_1 = __nccwpck_require__(9687);
 function v6ToV1(uuid) {
@@ -28083,6 +28098,7 @@ function v6ToV1(uuid) {
     const v1Bytes = _v6ToV1(v6Bytes);
     return typeof uuid === 'string' ? (0, stringify_js_1.unsafeStringify)(v1Bytes) : v1Bytes;
 }
+exports["default"] = v6ToV1;
 function _v6ToV1(v6Bytes) {
     return Uint8Array.of(((v6Bytes[3] & 0x0f) << 4) | ((v6Bytes[4] >> 4) & 0x0f), ((v6Bytes[4] & 0x0f) << 4) | ((v6Bytes[5] & 0xf0) >> 4), ((v6Bytes[5] & 0x0f) << 4) | (v6Bytes[6] & 0x0f), v6Bytes[7], ((v6Bytes[1] & 0x0f) << 4) | ((v6Bytes[2] & 0xf0) >> 4), ((v6Bytes[2] & 0x0f) << 4) | ((v6Bytes[3] & 0xf0) >> 4), 0x10 | ((v6Bytes[0] & 0xf0) >> 4), ((v6Bytes[0] & 0x0f) << 4) | ((v6Bytes[1] & 0xf0) >> 4), v6Bytes[8], v6Bytes[9], v6Bytes[10], v6Bytes[11], v6Bytes[12], v6Bytes[13], v6Bytes[14], v6Bytes[15]);
 }
@@ -28096,7 +28112,7 @@ function _v6ToV1(v6Bytes) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.updateV7State = updateV7State;
+exports.updateV7State = void 0;
 const rng_js_1 = __nccwpck_require__(5983);
 const stringify_js_1 = __nccwpck_require__(9687);
 const _state = {};
@@ -28128,10 +28144,19 @@ function updateV7State(state, now, rnds) {
     }
     return state;
 }
+exports.updateV7State = updateV7State;
 function v7Bytes(rnds, msecs, seq, buf, offset = 0) {
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
     if (!buf) {
         buf = new Uint8Array(16);
         offset = 0;
+    }
+    else {
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
     }
     msecs ??= Date.now();
     seq ??= ((rnds[6] * 0x7f) << 24) | (rnds[7] << 16) | (rnds[8] << 8) | rnds[9];
