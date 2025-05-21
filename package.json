@@ -40,7 +40,6 @@
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package"
   },
   "license": "MIT",
-
   "dependencies": {
     "@actions/core": "^1.11.1",
     "@actions/exec": "^1.1.0",
