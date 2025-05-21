@@ -1,5 +1,6 @@
-import require$$0 from 'os';
-import require$$0$1 from 'crypto';
+import require$$0$1 from 'os';
+import * as require$$0 from 'crypto';
+import require$$0__default from 'crypto';
 import require$$1$1, { promises } from 'fs';
 import * as require$$1 from 'path';
 import require$$1__default from 'path';
@@ -114,7 +115,7 @@ function requireCommand () {
 	};
 	Object.defineProperty(command, "__esModule", { value: true });
 	command.issue = command.issueCommand = void 0;
-	const os = __importStar(require$$0);
+	const os = __importStar(require$$0$1);
 	const utils_1 = requireUtils$1();
 	/**
 	 * Commands
@@ -222,9 +223,9 @@ function requireFileCommand () {
 	fileCommand.prepareKeyValueMessage = fileCommand.issueFileCommand = void 0;
 	// We use any as a valid input type
 	/* eslint-disable @typescript-eslint/no-explicit-any */
-	const crypto = __importStar(require$$0$1);
+	const crypto = __importStar(require$$0__default);
 	const fs = __importStar(require$$1$1);
-	const os = __importStar(require$$0);
+	const os = __importStar(require$$0$1);
 	const utils_1 = requireUtils$1();
 	function issueFileCommand(command, message) {
 	    const filePath = process.env[`GITHUB_${command}`];
@@ -25200,7 +25201,7 @@ function requireSummary () {
 		};
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
-		const os_1 = require$$0;
+		const os_1 = require$$0$1;
 		const fs_1 = require$$1$1;
 		const { access, appendFile, writeFile } = fs_1.promises;
 		exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
@@ -26089,7 +26090,7 @@ function requireToolrunner () {
 	};
 	Object.defineProperty(toolrunner, "__esModule", { value: true });
 	toolrunner.argStringToArray = toolrunner.ToolRunner = void 0;
-	const os = __importStar(require$$0);
+	const os = __importStar(require$$0$1);
 	const events = __importStar(require$$4);
 	const child = __importStar(require$$2$2);
 	const path = __importStar(require$$1__default);
@@ -26832,7 +26833,7 @@ function requirePlatform () {
 		};
 		Object.defineProperty(exports, "__esModule", { value: true });
 		exports.getDetails = exports.isLinux = exports.isMacOS = exports.isWindows = exports.arch = exports.platform = void 0;
-		const os_1 = __importDefault(require$$0);
+		const os_1 = __importDefault(require$$0$1);
 		const exec = __importStar(requireExec());
 		const getWindowsInfo = () => __awaiter(void 0, void 0, void 0, function* () {
 		    const { stdout: version } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', undefined, {
@@ -26935,7 +26936,7 @@ function requireCore () {
 		const command_1 = requireCommand();
 		const file_command_1 = requireFileCommand();
 		const utils_1 = requireUtils$1();
-		const os = __importStar(require$$0);
+		const os = __importStar(require$$0$1);
 		const path = __importStar(require$$1__default);
 		const oidc_utils_1 = requireOidcUtils();
 		/**
@@ -27247,62 +27248,6 @@ function requireCore () {
 
 var coreExports = requireCore();
 
-const byteToHex = [];
-for (let i = 0; i < 256; ++i) {
-    byteToHex.push((i + 0x100).toString(16).slice(1));
-}
-function unsafeStringify(arr, offset = 0) {
-    return (byteToHex[arr[offset + 0]] +
-        byteToHex[arr[offset + 1]] +
-        byteToHex[arr[offset + 2]] +
-        byteToHex[arr[offset + 3]] +
-        '-' +
-        byteToHex[arr[offset + 4]] +
-        byteToHex[arr[offset + 5]] +
-        '-' +
-        byteToHex[arr[offset + 6]] +
-        byteToHex[arr[offset + 7]] +
-        '-' +
-        byteToHex[arr[offset + 8]] +
-        byteToHex[arr[offset + 9]] +
-        '-' +
-        byteToHex[arr[offset + 10]] +
-        byteToHex[arr[offset + 11]] +
-        byteToHex[arr[offset + 12]] +
-        byteToHex[arr[offset + 13]] +
-        byteToHex[arr[offset + 14]] +
-        byteToHex[arr[offset + 15]]).toLowerCase();
-}
-
-let getRandomValues;
-const rnds8 = new Uint8Array(16);
-function rng() {
-    if (!getRandomValues) {
-        if (typeof crypto === 'undefined' || !crypto.getRandomValues) {
-            throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
-        }
-        getRandomValues = crypto.getRandomValues.bind(crypto);
-    }
-    return getRandomValues(rnds8);
-}
-
-const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-var native = { randomUUID };
-
-function v4(options, buf, offset) {
-    if (native.randomUUID && true && !options) {
-        return native.randomUUID();
-    }
-    options = options || {};
-    const rnds = options.random ?? options.rng?.() ?? rng();
-    if (rnds.length < 16) {
-        throw new Error('Random bytes length must be >= 16');
-    }
-    rnds[6] = (rnds[6] & 0x0f) | 0x40;
-    rnds[8] = (rnds[8] & 0x3f) | 0x80;
-    return unsafeStringify(rnds);
-}
-
 var ioExports = requireIo();
 
 var execExports = requireExec();
@@ -27354,7 +27299,7 @@ async function run() {
         const commandPath = await ioExports.which(command, true);
         const runnerTempPath = process.env.RUNNER_TEMP;
         const extension = resolveExtension(command);
-        const uniqueId = v4();
+        const uniqueId = require$$0.randomUUID();
         const scriptFileName = `post-run-action-${uniqueId}.${extension}`;
         const scriptPath = require$$1.join(runnerTempPath, scriptFileName);
         await promises.writeFile(scriptPath, content);
