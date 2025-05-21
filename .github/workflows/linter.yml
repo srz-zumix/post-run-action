@@ -44,7 +44,11 @@ jobs:
           FILTER_REGEX_EXCLUDE: dist/**/*
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_ACTIONS_COMMAND_ARGS: -ignore 'property "count" is not defined'
+          LINTER_RULES_PATH: ${{ github.workspace }}
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_JAVASCRIPT_STANDARD: false
-          VALIDATE_TYPESCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
+          VALIDATE_TYPESCRIPT_ES: false
+          VALIDATE_TYPESCRIPT_STANDARD: false
+          VALIDATE_JSON: false
