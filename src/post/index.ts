@@ -4,7 +4,7 @@
 
 import * as core from '@actions/core'
 import { promises as fs } from 'fs'
-import { v4 as uuidv4 } from 'uuid'
+import * as crypto from 'crypto'
 import * as path from 'path'
 import * as io from '@actions/io'
 import * as exec from '@actions/exec'
@@ -56,14 +56,14 @@ async function run(): Promise<void> {
 
     const runnerTempPath: string = process.env.RUNNER_TEMP as string
     const extension: string = resolveExtension(command)
-    const uniqueId = uuidv4()
+    const uniqueId = crypto.randomUUID()
     const scriptFileName = `post-run-action-${uniqueId}.${extension}`
     const scriptPath = path.join(runnerTempPath, scriptFileName)
     await fs.writeFile(scriptPath, content)
 
     const commandArgs = shellCommands
       .slice(1)
-      .map(item => item.replace('{0}', scriptPath))
+      .map((item) => item.replace('{0}', scriptPath))
 
     const options: exec.ExecOptions = {}
     options.windowsVerbatimArguments = command === 'cmd'

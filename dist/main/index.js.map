@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sources":["../../src/main/index.ts"],"sourcesContent":["/**\n * The entrypoint for the action.\n */\n\nconsole.log('post-run-action')\n"],"names":[],"mappings":"AAAA;;AAEG;AAEH,OAAO,CAAC,GAAG,CAAC,iBAAiB,CAAC"}
