@@ -1,4 +1,4 @@
-name: CodeQL
+name: Custom CodeQL
 
 on:
   pull_request:
