@@ -16,7 +16,8 @@ async function resolveShell(): Promise<string[]> {
     bash: ['bash', '--noprofile', '--norc', '-eo', 'pipefail', '{0}'],
     cmd: ['cmd', '/D', '/E:ON', '/V:OFF', '/S', '/C', '"CALL "{0}""'],
     pwsh: ['pwsh', '-command', ". '{0}'"],
-    powershell: ['powershell', '-command', ". '{0}'"]
+    powershell: ['powershell', '-command', ". '{0}'"],
+    dotnet: ['dotnet', 'run', '{0}']
   }
   const shellCommand = core.getInput('shell', { required: false })
   if (!shellCommand) {
@@ -39,7 +40,8 @@ function resolveExtension(command: string): string {
     python: 'py',
     cmd: 'cmd',
     pwsh: 'ps1',
-    powershell: 'ps1'
+    powershell: 'ps1',
+    dotnet: 'cs'
   }
   if (command in commandExtensions) {
     return commandExtensions[command]

@@ -109,6 +109,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.10'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
 
       - name: Test Local Action
         id: test-action
@@ -143,6 +146,14 @@ jobs:
           shell: python
           post-run: |
             print("Hello, world!")
+
+      - name: Test Local Action (Python)
+        id: test-dotnet
+        uses: ./
+        with:
+          shell: dotnet
+          post-run: |
+            Console.WriteLine("Hello, world!");
 
       - name: Test file
         run: |
