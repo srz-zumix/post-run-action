@@ -94,6 +94,14 @@ jobs:
           post-run: |
             print("Hello, world!")
 
+      - name: Test Local Action (Dotnet)
+        id: test-dotnet
+        uses: ./
+        with:
+          shell: dotnet
+          post-run: |
+            Console.WriteLine("Hello, world!");
+
       - name: Test file
         run: |
           test ! -f "${{ runner.temp }}/test.txt"
