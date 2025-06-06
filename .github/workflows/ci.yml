@@ -58,6 +58,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
     steps:
       - name: Checkout
         id: checkout
@@ -115,6 +116,7 @@ jobs:
     runs-on: windows-latest
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      DOTNET_NOLOGO: 1
     steps:
       - name: Checkout
         id: checkout
