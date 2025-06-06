@@ -147,7 +147,7 @@ jobs:
           post-run: |
             print("Hello, world!")
 
-      - name: Test Local Action (Python)
+      - name: Test Local Action (Dotnet)
         id: test-dotnet
         uses: ./
         with:
