@@ -179,3 +179,16 @@ jobs:
       - name: Test file
         run: |
           test ! -f "${{ runner.temp }}/test.txt"
+
+  test-export-ignore:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post Action
+        uses: srz-zumix/post-run-action@feature/export-ignore
+        with:
+          shell: python
+          post-run: |
+            print("Hello, world!")
+      - name: ls action_path
+        run: |
+          ls /home/runner/work/_actions/srz-zumix/post-run-action/feature/export-ignore
