@@ -6,10 +6,11 @@ dist/** -diff linguist-generated=true
 src/** export-ignore
 .devcontainer/** export-ignore
 .github/** export-ignore
-badges/** export-ignore
+badges export-ignore
 *.json export-ignore
 *.md export-ignore
 .* export-ignore
 *.yaml export-ignore
 *.mjs export-ignore
 *.ts export-ignore
+./*.js export-ignore
