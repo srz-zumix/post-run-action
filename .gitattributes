@@ -13,4 +13,4 @@ badges export-ignore
 *.yaml export-ignore
 *.mjs export-ignore
 *.ts export-ignore
-*.js export-ignore
+*.config.js export-ignore
