@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v5
         with:
           persist-credentials: false
-      - uses: haya14busa/action-update-semver@3f49a54b677d969c819c1c6ebea626a54dafe032 # v1.5.0
+      - uses: haya14busa/action-update-semver@7d2c558640ea49e798d46539536190aff8c18715 # v1.5.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ inputs.tag || '' }}
