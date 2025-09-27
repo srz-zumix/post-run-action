@@ -27263,7 +27263,7 @@ async function resolveShell() {
         cmd: ['cmd', '/D', '/E:ON', '/V:OFF', '/S', '/C', '"CALL "{0}""'],
         pwsh: ['pwsh', '-command', ". '{0}'"],
         powershell: ['powershell', '-command', ". '{0}'"],
-        dotnet: ['dotnet', 'run', '{0}']
+        dotnet: ['dotnet', 'run', '-c', 'Release', '{0}']
     };
     const shellCommand = coreExports.getInput('shell', { required: false });
     if (!shellCommand) {
