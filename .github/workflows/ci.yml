@@ -57,6 +57,7 @@ jobs:
         os:
           - ubuntu-latest
           - macos-latest
+          - windows-latest
     runs-on: ${{ matrix.os }}
     env:
       DOTNET_CLI_TELEMETRY_OPTOUT: 1
@@ -103,52 +104,19 @@ jobs:
           post-run: |
             print("Hello, world!")
 
-      - name: Test Local Action (Dotnet)
-        id: test-dotnet
-        uses: ./
-        with:
-          shell: dotnet
-          post-run: |
-            Console.WriteLine("Hello, world!");
-
-      - name: Test file
-        run: |
-          test ! -f "${{ runner.temp }}/test.txt"
-
-  test-action-windows:
-    name: GitHub Actions Test (Windows)
-    runs-on: windows-latest
-    env:
-      DOTNET_CLI_TELEMETRY_OPTOUT: 1
-      DOTNET_NOLOGO: 1
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v5
-        with:
-          persist-credentials: false
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.10'
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-
-      - name: Test Local Action
-        id: test-action
-        uses: ./
-        with:
-          post-run: |
-            echo "test" | tee "${{ runner.temp }}/test.txt"
-            if [ -f "${{ runner.temp }}/post.sh" ]; then
-              "${{ runner.temp }}/post.sh"
-            fi
-
       - name: Test Local Action (pwsh)
         id: test-pwsh
         uses: ./
         with:
           shell: pwsh
+          post-run: |
+            Write-Host "Hello World!!"
+
+      - name: Test Local Action (powershell)
+        id: test-powershell
+        uses: ./
+        with:
+          shell: powershell
           post-run: |
             Write-Host "Hello World!!"
 
@@ -159,14 +127,7 @@ jobs:
           shell: cmd
           post-run: |
             echo "Hello World!!"
-
-      - name: Test Local Action (Python)
-        id: test-python
-        uses: ./
-        with:
-          shell: python
-          post-run: |
-            print("Hello, world!")
+        if: runner.os == 'Windows'
 
       - name: Test Local Action (Dotnet)
         id: test-dotnet
