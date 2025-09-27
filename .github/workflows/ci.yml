@@ -119,6 +119,7 @@ jobs:
           shell: powershell
           post-run: |
             Write-Host "Hello World!!"
+        if: runner.os == 'Windows'
 
       - name: Test Local Action (cmd)
         id: test-cmd
