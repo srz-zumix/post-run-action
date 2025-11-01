@@ -39,7 +39,7 @@ jobs:
 
       - name: Lint Codebase
         id: super-linter
-        uses: super-linter/super-linter/slim@ffde3b2b33b745cb612d787f669ef9442b1339a6 # v8.1.0
+        uses: super-linter/super-linter/slim@2bdd90ed3262e023ac84bf8fe35dc480721fc1f2 # v8.2.1
         env:
           DEFAULT_BRANCH: main
           FILTER_REGEX_EXCLUDE: dist/**/*
@@ -47,6 +47,8 @@ jobs:
           GITHUB_ACTIONS_COMMAND_ARGS: -ignore 'property "count" is not defined'
           LINTER_RULES_PATH: ${{ github.workspace }}
           VALIDATE_ALL_CODEBASE: true
+          VALIDATE_BIOME_FORMAT: false
+          VALIDATE_BIOME_LINT: false
           VALIDATE_JAVASCRIPT_ES: false
           VALIDATE_JAVASCRIPT_STANDARD: false
           VALIDATE_JSCPD: false
