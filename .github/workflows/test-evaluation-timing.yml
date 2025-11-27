@@ -1,0 +1,65 @@
+name: Test Evaluation Timing
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test-evaluation-timing:
+    name: Test post-run context evaluation timing
+    runs-on: ubuntu-latest
+    env:
+      TEST_VAR: initial_value
+
+    steps:
+      - name: Checkout
+        id: checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      # This step sets up post-run-action with an expression referencing TEST_VAR
+      # The expression ${{ env.TEST_VAR }} is evaluated NOW (at step setup time)
+      # so it will capture "initial_value", not the modified value later
+      - name: Setup post-run with expression
+        id: post-run-test
+        uses: ./
+        with:
+          post-run: |
+            echo "Expression was evaluated at step setup time, not at post-run time"
+            echo "Value from expression: ${{ env.TEST_VAR }}"
+            echo "Current env value: $TEST_VAR"
+            if [ "${{ env.TEST_VAR }}" = "initial_value" ]; then
+              echo "✓ Confirmed: Expression was evaluated at step setup time"
+            else
+              echo "✗ Unexpected: Expression evaluation timing may have changed"
+              exit 1
+            fi
+            if [ "$TEST_VAR" = "modified_value" ]; then
+              echo "✓ Confirmed: Environment variable reflects the modified value at post-run time"
+            else
+              echo "Note: Environment variable value at post-run time: $TEST_VAR"
+            fi
+
+      # Modify the environment variable after the post-run-action step was set up
+      - name: Modify environment variable
+        run: |
+          echo "TEST_VAR=modified_value" >> "$GITHUB_ENV"
+          echo "Modified TEST_VAR to 'modified_value'"
+
+      - name: Verify modification took effect
+        run: |
+          echo "Current TEST_VAR: $TEST_VAR"
+          if [ "$TEST_VAR" = "modified_value" ]; then
+            echo "✓ Environment variable was successfully modified"
+          else
+            echo "✗ Environment variable modification did not take effect"
+            exit 1
+          fi
