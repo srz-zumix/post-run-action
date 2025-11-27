@@ -26,18 +26,18 @@ jobs:
           persist-credentials: false
 
       # This step sets up post-run-action with an expression referencing TEST_VAR
-      # The expression ${{ env.TEST_VAR }} is evaluated NOW (at step setup time)
-      # so it will capture "initial_value", not the modified value later
+      # The expression ${{ env.TEST_VAR }} is evaluated at post-run time
+      # so it will capture "modified_value", not the initial value
       - name: Setup post-run with expression
         id: post-run-test
         uses: ./
         with:
           post-run: |
-            echo "Expression was evaluated at step setup time, not at post-run time"
+            echo "Expression is evaluated at post-run time, not at step setup time"
             echo "Value from expression: ${{ env.TEST_VAR }}"
             echo "Current env value: $TEST_VAR"
-            if [ "${{ env.TEST_VAR }}" = "initial_value" ]; then
-              echo "✓ Confirmed: Expression was evaluated at step setup time"
+            if [ "${{ env.TEST_VAR }}" = "modified_value" ]; then
+              echo "✓ Confirmed: Expression was evaluated at post-run time"
             else
               echo "✗ Unexpected: Expression evaluation timing may have changed"
               exit 1
