@@ -56,5 +56,5 @@ steps:
   - run: echo "MY_VAR=modified_value" >> "$GITHUB_ENV"
 ```
 
-In this example, even though `MY_VAR` is modified after the post-run-action step, the expression `${{ env.MY_VAR }}` will contain `modified_value` because it is evaluated when the post-run script actually executes.
+In this example, even though `MY_VAR` is modified in a step after the post-run-action step is defined, the expression `${{ env.MY_VAR }}` will contain `modified_value` because it is evaluated when the post-run script actually executes (during the post phase).
 
