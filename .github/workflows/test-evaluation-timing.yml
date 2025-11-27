@@ -103,7 +103,6 @@ jobs:
       # Setup post-run-action with job.status expression
       - name: Setup post-run with job.status
         id: post-run-job-status-failure
-        if: always()
         uses: ./
         with:
           post-run: |
