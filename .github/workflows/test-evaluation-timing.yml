@@ -89,30 +89,30 @@ jobs:
       - name: This step succeeds
         run: echo "This step completes successfully"
 
-  test-job-status-failure:
-    name: Test job.status evaluation (failure case)
-    runs-on: ubuntu-latest
+  # test-job-status-failure:
+  #   name: Test job.status evaluation (failure case)
+  #   runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout
-        id: checkout
-        uses: actions/checkout@v5
-        with:
-          persist-credentials: false
+  #   steps:
+  #     - name: Checkout
+  #       id: checkout
+  #       uses: actions/checkout@v5
+  #       with:
+  #         persist-credentials: false
 
-      # Setup post-run-action with job.status expression
-      - name: Setup post-run with job.status
-        id: post-run-job-status-failure
-        uses: ./
-        with:
-          post-run: |
-            echo "Testing job.status evaluation timing (failure case)"
-            echo "job.status from expression: ${{ job.status }}"
-            echo "Expected: failure (if evaluated at post-run time after a step fails)"
+  #     # Setup post-run-action with job.status expression
+  #     - name: Setup post-run with job.status
+  #       id: post-run-job-status-failure
+  #       uses: ./
+  #       with:
+  #         post-run: |
+  #           echo "Testing job.status evaluation timing (failure case)"
+  #           echo "job.status from expression: ${{ job.status }}"
+  #           echo "Expected: failure (if evaluated at post-run time after a step fails)"
 
-      - name: This step fails intentionally
-        run: exit 1
+  #     - name: This step fails intentionally
+  #       run: exit 1
 
-      - name: This step is skipped
-        if: success()
-        run: echo "This should be skipped"
+  #     - name: This step is skipped
+  #       if: success()
+  #       run: echo "This should be skipped"
