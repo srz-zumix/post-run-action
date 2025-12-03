@@ -33,3 +33,29 @@ See [action.yml](./action.yml)
 
 
 ```
+
+## Note on Expression Evaluation Timing
+
+The `post-run` input is evaluated when the post step actually runs (during the post phase), not when the step is first processed.
+This means that any expressions using `${{ ... }}` syntax (e.g., `${{ env.MY_VAR }}`) will capture the values at the time the post-run script executes,
+reflecting any changes made during the workflow.
+
+For example:
+
+```yaml
+env:
+  MY_VAR: initial_value
+
+steps:
+  - uses: srz-zumix/post-run-action@v2
+    with:
+      post-run: |
+        # ${{ env.MY_VAR }} is evaluated at post-run time
+        echo "Expression value: ${{ env.MY_VAR }}"  # Will output: modified_value
+        echo "Environment value: $MY_VAR"            # Will output: modified_value
+
+  - run: echo "MY_VAR=modified_value" >> "$GITHUB_ENV"
+```
+
+In this example, even though `MY_VAR` is modified in a step after the post-run-action step is defined,
+the expression `${{ env.MY_VAR }}` will contain `modified_value` because it is evaluated when the post-run script actually executes (during the post phase).
