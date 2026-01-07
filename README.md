@@ -9,7 +9,7 @@ See [action.yml](./action.yml)
 
 ```yaml
 - name: Post Action
-  uses: srz-zumix/post-run-action@v2
+  uses: srz-zumix/post-run-action@v3
   with:
     # custom shell
     # Default : bash -e {0}
@@ -25,7 +25,7 @@ See [action.yml](./action.yml)
       fi
 - name: Post Action (Python)
   id: test-python
-  uses: srz-zumix/post-run-action@v2
+  uses: srz-zumix/post-run-action@v3
   with:
     shell: python
     post-run: |
@@ -47,7 +47,7 @@ env:
   MY_VAR: initial_value
 
 steps:
-  - uses: srz-zumix/post-run-action@v2
+  - uses: srz-zumix/post-run-action@v3
     with:
       post-run: |
         # ${{ env.MY_VAR }} is evaluated at post-run time
