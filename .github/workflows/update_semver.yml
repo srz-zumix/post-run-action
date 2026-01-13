@@ -8,6 +8,11 @@ on:
   release:
     types: [published]
   workflow_dispatch:
+    inputs:
+      tag:
+        type: string
+        default: ''
+        required: false
   workflow_call:
     inputs:
       tag:
