@@ -54,7 +54,7 @@
     "@types/jest": "^30.0.0",
     "@types/node": "^24.10.0",
     "@types/uuid": "^11.0.0",
-    "@typescript-eslint/eslint-plugin": "^8.58.2",
+    "@typescript-eslint/eslint-plugin": "^8.59.0",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
