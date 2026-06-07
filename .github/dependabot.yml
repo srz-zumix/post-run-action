@@ -6,6 +6,10 @@ updates:
       interval: weekly
     cooldown:
       default-days: 7
+    ignore:
+      - dependency-name: "actions/*"
+        update-types:
+          - "version-update:semver-patch"
     groups:
       actions-minor:
         update-types:
