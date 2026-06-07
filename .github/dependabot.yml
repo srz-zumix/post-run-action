@@ -9,6 +9,7 @@ updates:
     ignore:
       - dependency-name: "actions/*"
         update-types:
+          - "version-update:semver-minor"
           - "version-update:semver-patch"
     groups:
       actions-minor:
