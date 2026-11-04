@@ -41,7 +41,7 @@ jobs:
 
       - name: Install Dependencies
         id: install
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build dist/ Directory
         id: build
