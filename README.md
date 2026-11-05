@@ -3,6 +3,18 @@
 This action runs a script in the post process.
 It is assumed that it will be called and used with a composite action that cannot perform post processing.
 
+## Development dependencies
+
+Use the Node.js version in `.node-version` and install dependencies with
+`npm ci --ignore-scripts`.
+
+The npm overrides keep transitive `glob` and `minimatch` dependencies on patched
+versions. Since upstream `deepmerge` has no fix for GHSA-gcqx-w48m-w2h4, its
+override uses the API-compatible `@stackline/deepmerge` fork. Keep these overrides
+until the consuming packages adopt fixed dependencies; verify lint, tests,
+coverage, and bundling when updating them. ESLint uses native flat configs;
+unused legacy import-lint and formatting integrations have been removed.
+
 ## Usage
 
 See [action.yml](./action.yml)
